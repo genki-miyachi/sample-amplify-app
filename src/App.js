@@ -1,10 +1,8 @@
 import './App.css';
 import { Header } from './ui-components';
 
-function Hello(props) {
-  return (
-    <p className={"alert alert-" + props.type}>{props.message}</p>
-  )
+function onClick() {
+  alert("クリックした！")
 }
 
 function App() {
@@ -12,8 +10,9 @@ function App() {
     <div className="py-4">
       <Header className="mb-4" />
       <p>※これ、UIコンポーネントを利用した表示です</p>
-      <Hello message="サンプルのメッセージです。" type="primary" />
-      <Hello message="表示のタイプも変えられます" type="dark" />
+      <button className="btn btn-primary" onClick={onClick}>
+        Click me!
+      </button>
     </div>
   );
 }
