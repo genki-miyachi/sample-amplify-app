@@ -1,59 +1,54 @@
-import { useEffect, useState } from 'react';
 import './App.css';
+import '@aws-amplify/ui-react/styles.css'
+import { Auth } from 'aws-amplify'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 import { Header } from './ui-components';
 
+const content1 = <p>タブ1のコンテンツ</p>;
+const content2 = <p>タブ2のコンテンツ</p>;
+const content3 = <p>タブ3のコンテンツ</p>;
+const content4 = <p>タブ4のコンテンツ</p>;
 
-function useMessage(value) {
-  const data = [
-    ["おやすみ、", "..."],
-    ["おはよう、", "!"],
-    ["こんにちは、", "さん。"],
-    ["こんばんは、", "さん。"],
-  ]
-  const [msg, setMsg] = useState(value);
-  
-  const setMsgs = (v) => {
-    if (v == "") {
-      setMsg("no message.")
-    } else {
-      const h = Math.floor(new Date().getHours() / 6)
-      setMsg(data[h][0] + v + data[h][1])
-    }
-  }
-  
-  return [msg, setMsgs];
-}
-
-function Hello(props) {
+function App() {
   return (
-    <div className={"alert alert-" + props.type}>
-      {props.message}
+    <div>
+      <Header className='my-4' />
+      <p>※これは、UIコンポーネントを利用した表示です</p>
+      <ul className='nav nav-tabs'>
+        <li className="nav-item">
+          <a href="#tab1" className="nav-link" data-toggle="tab">List</a>
+        </li>
+        <li className="nav-item">
+          <a href="#tab2" className="nav-link" data-toggle="tab">Create</a>
+        </li>
+        <li className="nav-item">
+          <a href="#tab3" className="nav-link" data-toggle="tab">Update</a>
+        </li>
+        <li className="nav-item">
+          <a href="#tab4" className="nav-link" data-toggle="tab">Delete</a>
+        </li>
+      </ul>
+      <div className="tab-content">
+        <div id="tab1" className="my-2 tab-pane">
+          { content1 }
+        </div>
+        <div id="tab2" className="my-2 tab-pane">
+          { content2 }
+        </div>
+        <div id="tab3" className="my-2 tab-pane">
+          { content3 }
+        </div>
+        <div id="tab4" className="my-2 tab-pane">
+          { content4 }
+        </div>
+      </div>
+      <p className="my-2">
+        <a className="btn btn-primary" href="." onClick={Auth.signout}>
+          Sign Out
+        </a>
+      </p>
     </div>
   )
 }
 
-function App() {
-  const [msg, setMsg] = useState("")
-  const [message, setMessage] = useMessage(msg)
-  
-  const onChange = (e) => {
-    setMsg(e.target.value);
-  }
-  
-  useEffect(() => {
-    setMessage(msg);
-  }, [msg])
-  
-  return (
-    <div className="py-4">
-      <Header className="mb-4" />
-      <p>※これ、UIコンポーネントを利用した表示です</p>
-      <div className="mx-0 my-3 row">
-        <input type="text" className="form-control col" onChange={onChange}/>
-      </div>
-      <Hello message={message} type="primary" />
-    </div>
-  );
-}
-
-export default App;
+export default withAuthenticator(App);
