@@ -2,6 +2,28 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { Header } from './ui-components';
 
+
+function useMessage(value) {
+  const data = [
+    ["おやすみ、", "..."],
+    ["おはよう、", "!"],
+    ["こんにちは、", "さん。"],
+    ["こんばんは、", "さん。"],
+  ]
+  const [msg, setMsg] = useState(value);
+  
+  const setMsgs = (v) => {
+    if (v == "") {
+      setMsg("no message.")
+    } else {
+      const h = Math.floor(new Date().getHours() / 6)
+      setMsg(data[h][0] + v + data[h][1])
+    }
+  }
+  
+  return [msg, setMsgs];
+}
+
 function Hello(props) {
   return (
     <div className={"alert alert-" + props.type}>
@@ -11,31 +33,15 @@ function Hello(props) {
 }
 
 function App() {
-  const data = [
-    ["おやすみ、", "..."],
-    ["おはよう、", "!"],
-    ["こんにちは、", "さん。"],
-    ["こんばんは、", "さん。"],
-  ]
-  const [input, setInput] = useState("");
-  const [msg, setMsg] = useState(input);
-  const [msgs, setMsgs] = useState(msg); 
+  const [msg, setMsg] = useState("")
+  const [message, setMessage] = useMessage(msg)
   
   const onChange = (e) => {
-    setInput(e.target.value)
-  }
-  
-  const onClick = () => {
-    setMsg(input)
+    setMsg(e.target.value);
   }
   
   useEffect(() => {
-    if (msg == "") {
-      setMsgs("no message.");
-    } else {
-      const h = Math.floor(new Date().getHours() / 6);
-      setMsgs(data[h][0] + msg + data[h][1]);
-    }
+    setMessage(msg);
   }, [msg])
   
   return (
@@ -44,9 +50,8 @@ function App() {
       <p>※これ、UIコンポーネントを利用した表示です</p>
       <div className="mx-0 my-3 row">
         <input type="text" className="form-control col" onChange={onChange}/>
-        <button className="btn btn-primary col-2" onClick={onClick}>Click</button>
       </div>
-      <Hello message={msgs} type="primary" />
+      <Hello message={message} type="primary" />
     </div>
   );
 }
